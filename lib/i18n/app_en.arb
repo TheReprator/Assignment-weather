@@ -1,0 +1,8 @@
+{
+  "@@locale": "en",
+  "title": "Weather App",
+  "searchHint": "Enter a location",
+  "retry": "Retry",
+  "loading":"Loading Weather",
+  "locationHint":"Enter a location"
+}

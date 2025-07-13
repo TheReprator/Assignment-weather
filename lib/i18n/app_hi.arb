@@ -1,0 +1,8 @@
+{
+  "@@locale": "hi",
+  "title": "मौसम ऐप",
+  "searchHint": "स्थान दर्ज करें",
+  "retry": "पुन: प्रयास करें",
+  "loading":"Loading Weather",
+  "locationHint":"Enter a location"
+}
