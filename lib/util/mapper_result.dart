@@ -1,5 +1,6 @@
 abstract class MapperResult<Input, Output> {
   Output mapTo(Input? from);
+  Input mapFrom(Output? from);
 }
 
 extension MapperExtension<Input, Output> on MapperResult<Input, Output> {

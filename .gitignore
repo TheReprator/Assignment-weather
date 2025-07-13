@@ -43,3 +43,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+*.g.dart 
+*.freezed.dart
+*.chopper.dart
+
+/macos/build/*
+/lib/i18n/app_localizations.dart
+/lib/i18n/app_localizations_en.dart
+/lib/i18n/app_localizations_hi.dart
+
+*.config.dart

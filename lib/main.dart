@@ -1,38 +1,52 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:weather/app/db/database.dart';
+import 'package:weather/app/db/weather_db_handler.dart';
 import 'package:weather/app/routes/go_router_init.dart';
 import 'package:weather/app/themes.dart';
 import 'package:weather/di/di.dart';
 import 'package:weather/i18n/app_localizations.dart';
 import 'package:weather/util/logger.dart' as appLogger;
 
-import 'package:logging/logging.dart';
-
 Future<void> main() async {
-  runZonedGuarded<Future<void>>(
+  runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      _setupLogging();
+
+      _setupRootLogger();
       configureDependencies();
 
-      final logger = getIt.get<appLogger.Logger>();
+      final logger = getIt<appLogger.Logger>();
+      final dbHandler = getIt<WeatherDbHandler>()..initLogger(logger);
+
+      await _initializeApp(dbHandler);
+
       logger.runLogging(
-        () => runZonedGuarded(() {}, logger.logZoneError),
+        () => runApp(const MyApp()),
         const appLogger.LogOptions(),
       );
-      runApp(const MyApp());
     },
-    (Object error, StackTrace stack) {
-      debugPrint(error.toString());
+    (error, stackTrace) {
+      debugPrint("Uncaught error: $error");
     },
   );
 }
 
-void _setupLogging() {
+Future<void> _initializeApp(WeatherDbHandler dbHandler) async {
+  final DbInfo dbInfo = (
+    dbName: 'weather',
+    queryFileName: 'create_weather_table_queries',
+    dbVersion: 1,
+  );
+  await dbHandler.initializeDb(dbInfo);
+}
+
+void _setupRootLogger() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((rec) {
-    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+    debugPrint('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 }
 
